@@ -30,6 +30,26 @@ public class Usuario {
 	
 	@Column(name = "telefone", length = 15, nullable = false)
 	private String telefone;
+	
+	public Usuario(Integer id, String nomeCompleto, String username, String email, String senha, String telefone) {
+		super();
+		this.id = id;
+		this.nomeCompleto = nomeCompleto;
+		this.username = username;
+		this.email = email;
+		this.senha = senha;
+		this.telefone = telefone;
+	}
+
+	public Usuario(String username, String email) {
+		super();
+		this.username = username;
+		this.email = email;
+	}
+	
+	public Usuario() {
+		super();
+	}
 
 	public Integer getId() {
 		return id;

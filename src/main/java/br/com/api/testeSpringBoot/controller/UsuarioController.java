@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import br.com.api.testeSpringBoot.dao.UsuarioDAO;
+
+import br.com.api.testeSpringBoot.DAO.UsuarioDAO;
+import br.com.api.testeSpringBoot.DTO.UsuarioDTO;
 import br.com.api.testeSpringBoot.model.Usuario;
 
 @RestController
@@ -19,7 +21,13 @@ public class UsuarioController {
 
 	@Autowired
 	UsuarioDAO dao;
-
+	
+	@GetMapping("/usuarios/username")
+	public ResponseEntity <List<UsuarioDTO>> exibirUsername() {
+		List<UsuarioDTO> res = dao.recuperarUsername();
+		return ResponseEntity.status(200).body(res);
+	}
+	
 	@GetMapping("/usuarios")
 	public ResponseEntity<List<Usuario>> mostrarTodosUsuario() {
 		List<Usuario> res = (List<Usuario>) dao.findAll();
@@ -29,10 +37,10 @@ public class UsuarioController {
 		}
 		return ResponseEntity.status(404).build();
 	}
-
+	
 	@GetMapping("/usuarios/{id}")
 	public ResponseEntity<?> mostrarUmUsuario(@PathVariable Integer id) {
-		Usuario res = (Usuario) dao.findById(id).orElse(null);
+		Usuario res =  dao.findById(id).orElse(null);
 
 		if (res != null) {
 			return ResponseEntity.status(200).body(res);
@@ -47,7 +55,7 @@ public class UsuarioController {
 			return ResponseEntity.badRequest().body("The field nomeCompleto is obrigatory");
 		}
 		try {
-			Usuario res = (Usuario) dao.save(novoUsuario);
+			Usuario res = dao.save(novoUsuario);
 			return ResponseEntity.status(201).body(res);
 		} catch (Exception ex) {
 			return ResponseEntity.status(400).body(ex.getMessage());
